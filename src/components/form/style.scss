@@ -1,3 +1,6 @@
+@import "../../App.scss";
+@import "../../amountStyles.scss";
+
 .wrapper {
   width: 100%;
   .container {
@@ -5,11 +8,24 @@
     margin: 0 auto;
     padding: 2.5rem;
 
+    @include md {
+      padding: 1.5rem;
+    }
+    @include sm {
+      padding: 0.5rem;
+    }
+
     form {
       margin-right: 2.5rem;
       min-width: 30%;
       display: flex;
       flex-direction: column;
+      @include md {
+        margin-right: 0;
+      }
+      @include sm {
+        margin-right: 0;
+      }
       * {
         margin-bottom: 1.25rem;
       }
@@ -26,12 +42,10 @@
         text-align: center;
       }
       .input__error {
-        @extend .input;
         border: 1px solid #f00;
         background: #fff;
         box-shadow: 0px 0px 30px 0px rgba(255, 0, 0, 0.2);
       }
-
       .radio-button {
         font-size: 0.9375rem;
         p {
@@ -41,8 +55,12 @@
         .radio-buttons {
           display: flex;
           justify-content: space-between;
+          @include sm {
+            font-size: 0.8rem;
+          }
 
           label {
+            align-items: center;
             span {
               margin: 0 0.5rem 0 0;
               top: 25%;
@@ -66,6 +84,11 @@
           background: #fff;
           box-shadow: 0px 0px 80px 0px rgba(0, 0, 0, 0.4);
         }
+        .input__error {
+          border: 1px solid #f00;
+          background: #fff;
+          box-shadow: 0px 0px 30px 0px rgba(255, 0, 0, 0.2);
+        }
 
         .custom-radio::before {
           content: "";
@@ -86,14 +109,63 @@
           display: block;
           transform: translate(-50%, -50%) scale(1);
         }
+        .content {
+          display: none;
+        }
       }
     }
 
     .invisible {
+      @include lg {
+        display: none;
+      }
+      @include md {
+        display: none;
+      }
+      @include sm {
+        display: none;
+      }
       opacity: 0;
     }
 
     .rules {
+      position: relative;
+      @include lg {
+        @include mobile;
+      }
+      @include md {
+        @include mobile;
+        margin: 0;
+      }
+      @include sm {
+        @include mobile;
+        margin: 0;
+      }
+      .close__icon {
+        @include lg {
+          display: block;
+        }
+        @include md {
+          display: block;
+        }
+        @include sm {
+          width: 1rem;
+          height: 1rem;
+          display: block;
+        }
+
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        background-image: url(../../icons8-close.svg);
+        background-size: contain;
+        cursor: pointer;
+        cursor: pointer;
+        right: 0;
+        top: 0;
+        margin: 1rem;
+        display: none;
+      }
       border-radius: 0.625rem;
       background: rgba(255, 0, 0, 0.03);
       box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.1);

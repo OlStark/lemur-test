@@ -1,3 +1,4 @@
+import "./App.scss";
 import Form from "./components/form/Form";
 
 function App() {

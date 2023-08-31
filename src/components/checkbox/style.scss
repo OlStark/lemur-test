@@ -1,5 +1,17 @@
+@import "../../App.scss";
+@import "../../amountStyles.scss";
+
 .checkbox__group {
   label {
+    @include lg {
+      align-items: center;
+    }
+    @include md {
+      align-items: center;
+    }
+    @include sm {
+      align-items: center;
+    }
     display: flex;
     .agreement {
       font-size: 0.9375rem;
@@ -23,6 +35,12 @@
     box-shadow: 0px 0px 80px 0px rgba(0, 0, 0, 0.4);
     vertical-align: sub;
     margin-right: 1rem;
+  }
+
+  .input__error {
+    border: 1px solid #f00;
+    background: #fff;
+    box-shadow: 0px 0px 30px 0px rgba(255, 0, 0, 0.2);
   }
 
   .custom-checkbox::before {

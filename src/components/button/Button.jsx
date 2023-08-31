@@ -1,9 +1,11 @@
 import "./style.scss";
 
-function Button() {
+function Button({ formSend }) {
   return (
     <div className="button">
-      <button>Отправить</button>
+      <button type="button" onClick={(e) => formSend(e)}>
+        Отправить
+      </button>
     </div>
   );
 }

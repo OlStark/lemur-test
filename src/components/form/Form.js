@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import InputMask from "react-input-mask";
 import Button from "../button/Button";
 import Checkbox from "../checkbox/checkbox";
@@ -9,20 +9,19 @@ const Form = () => {
   const [tel, setTel] = useState("");
   const [nameIsDirty, setNameIsDirty] = useState(false);
   const [telIsDirty, setTelIsDirty] = useState(false);
-  const [nameError, setNameError] = useState(false);
-  const [telError, setTelError] = useState(false);
-  const [formValid, setFormValid] = useState(false);
-  const [checkRadio, setCheckRadio] = useState("");
+  const [checkRadio, setCheckRadio] = useState(null);
   const [check, setCheck] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    if (nameError || telError) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
-  }, [nameError, telError]);
+  ///Errors
+  const [nameError, setNameError] = useState(false);
+  const [telError, setTelError] = useState(false);
+  const [radioError, setRadioError] = useState(false);
+  const [checkError, setCheckError] = useState(false);
+
+  const ref = useRef(true);
+  const firstRadioRef = useRef(true);
+  const secondRadioRef = useRef(true);
 
   const nameHandler = (e) => {
     setName(e.target.value);
@@ -43,14 +42,39 @@ const Form = () => {
     }
   };
 
-  const blurHandler = (e) => {
-    switch (e.target.name) {
-      case "name":
-        setNameIsDirty(true);
-        break;
-      case "tel":
-        setTelIsDirty(true);
-        break;
+  const formSend = (e) => {
+    e.preventDefault();
+    if (name === "") {
+      setNameError(true);
+    }
+    if (tel === "") {
+      setTelError(true);
+    }
+    if (checkRadio === null) {
+      setRadioError(true);
+    }
+    if (check === false) {
+      setCheckError(true);
+    } else {
+      let formData = [name, tel, checkRadio];
+
+      sendData();
+
+      setName("");
+      setTel("");
+
+      ref.current.checked = false;
+      firstRadioRef.current.checked = false;
+      secondRadioRef.current.checked = false;
+      alert("mail send");
+
+      async function sendData() {
+        ///здесь идет отправка данных на бэк
+        // return await fetch("../../nodemailer.js", {
+        //   method: "POST",
+        //   body: formData,
+        // });
+      }
     }
   };
 
@@ -64,18 +88,16 @@ const Form = () => {
             одного рабочего дня
           </p>
           <input
-            onBlur={(e) => blurHandler(e)}
             onChange={(e) => nameHandler(e)}
             value={name}
             name="name"
             type="text"
             placeholder="Имя"
-            className={nameIsDirty && nameError ? "input__error" : "input"}
+            className={nameError ? "input__error input" : "input"}
           />
 
           <InputMask
             mask={"+7 (999) - 999 - 99 - 99"}
-            onBlur={(e) => blurHandler(e)}
             onChange={(e) => telHandler(e)}
             value={tel}>
             {() => (
@@ -83,7 +105,7 @@ const Form = () => {
                 name="tel"
                 type="tel"
                 placeholder="+7 (___) ___ - __ - __"
-                className={telIsDirty && telError ? "input__error" : "input"}
+                className={telError ? "input__error input" : "input"}
               />
             )}
           </InputMask>
@@ -97,10 +119,14 @@ const Form = () => {
                   onClick={(e) => setCheckRadio(e.target.value)}
                   className="radio"
                   type="radio"
-                  name="radio"
+                  name={checkRadio}
                   value="Call"
+                  ref={firstRadioRef}
                 />
-                <span className="custom-radio"></span>
+                <span
+                  className={
+                    radioError ? "input__error custom-radio" : "custom-radio"
+                  }></span>
                 Перезвонить
               </label>
               <label>
@@ -108,23 +134,30 @@ const Form = () => {
                   onClick={(e) => setCheckRadio(e.target.value)}
                   className="radio"
                   type="radio"
-                  name="radio"
+                  name={checkRadio}
                   value="Telegram"
+                  ref={secondRadioRef}
                 />
-                <span className="custom-radio"></span>
+                <span
+                  className={
+                    radioError ? "input__error custom-radio" : "custom-radio"
+                  }></span>
                 Написать в Telegram
               </label>
             </div>
           </div>
-          <Button />
+          <Button formSend={formSend} />
           <Checkbox
             setCheck={setCheck}
             check={check}
             visible={visible}
             setVisible={setVisible}
+            checkError={checkError}
+            inputRef={ref}
           />
         </form>
         <div className={visible ? "rules" : "invisible"}>
+          <div className="close__icon" onClick={() => setVisible(false)}></div>
           <p>
             Компания ООО «Тест» с уважением относится к информации личного
             характера, касающейся посетителей Сайта «lemurteam.ru» и его
